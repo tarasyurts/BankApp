@@ -1,13 +1,13 @@
-package accountproperties;
+package property.accountprop;
 
 import org.javatuples.Triplet;
+import property.PropertyProcessor;
 
-import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class CurrentBalance implements AccountProperty {
+public class CurrentBalance implements PropertyProcessor {
 
     private final String propertyName = "Current Balance";
     private final int length = 10;

@@ -1,12 +1,13 @@
-package accountproperties;
+package property.accountprop;
 
 import org.javatuples.Triplet;
+import property.PropertyProcessor;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class LastTransactionDateTime implements AccountProperty {
+public class LastTransactionDateTime implements PropertyProcessor {
 
     private final String propertyName = "Last Transaction Date Time";
     private final int length = 14;

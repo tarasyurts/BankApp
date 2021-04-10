@@ -1,36 +1,31 @@
 package config;
 
-import accountproperties.AccountProperty;
-import org.javatuples.Pair;
+import property.PropertyProcessor;
 import org.javatuples.Triplet;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
-public class AccountPropertiesConfig {
+public class PropertiesConfig {
 
 
     private String line;
     private int offset;
-    private final List<AccountProperty> accountPropertyList = new ArrayList<>() ;
+    private final List<PropertyProcessor> propertyProcessorList = new ArrayList<>() ;
 
-    public AccountPropertiesConfig() {
-    }
-
-    public AccountPropertiesConfig setLine(String line){
+    public PropertiesConfig setLine(String line){
         this.line = line;
         return this;
     }
 
-    public AccountPropertiesConfig addProperty(AccountProperty accountProperty){
-        accountPropertyList.add(accountProperty);
+    public PropertiesConfig addProperty(PropertyProcessor propertyProcessor){
+        propertyProcessorList.add(propertyProcessor);
         return this;
     }
 
     public LinkedHashMap<String, Object> config(){
 
         LinkedHashMap<String, Object> result = new LinkedHashMap<>();
-        accountPropertyList
+        propertyProcessorList
                 .forEach(accountProperty -> {
                     Triplet<String, Object, Integer> processedData = accountProperty.process(line, offset);
                     offset += processedData.getValue2();
