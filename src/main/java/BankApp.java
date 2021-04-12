@@ -1,23 +1,51 @@
-import config.PropertiesConfig;
 import config.Configurer;
+import file.BankFile;
+import file.BankFileManager;
+import property.PropertiesProcessor;
 
-import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 public class BankApp {
     public static void main(String[] args) {
 
-        PropertiesConfig clientPropertiesConfig = new PropertiesConfig();
-        PropertiesConfig accountPropertiesConfig = new PropertiesConfig();
+        List<BankFile> clientBankFiles;
+        List<BankFile> toSaveClientBankFiles = new ArrayList<>();
 
-        Configurer.configClientProperties(clientPropertiesConfig);
-        Configurer.configAccountProperties(accountPropertiesConfig);
+        try {
+            clientBankFiles = BankFileManager.readBankFiles();
 
-        LinkedHashMap<String, Object> result =
-                clientPropertiesConfig.setLine("1002Jessica             Greenwoodson            19911112").config();
+            for (BankFile clientBankFile : clientBankFiles) {
 
-        result.entrySet().forEach(System.out::println);
+                BankFile tempBankFile = clientBankFile;
+                do {
+                    List<LinkedHashMap<String, Object>> processed = tempBankFile.getProcessed();
 
+                    processed.forEach(resultMap -> resultMap.entrySet().forEach(System.out::println));
+
+                    tempBankFile = tempBankFile.getAssociatedBankFile();
+                } while ( tempBankFile != null);
+                toSaveClientBankFiles.add(clientBankFile);
+            }
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        toSaveClientBankFiles.forEach(clientBankFile -> {
+            try {
+                BankFile tempBankFile = clientBankFile;
+                do {
+                    BankFileManager.removeProcessed(tempBankFile);
+                    tempBankFile = tempBankFile.getAssociatedBankFile();
+                } while ( tempBankFile != null);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 }
