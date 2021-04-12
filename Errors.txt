@@ -1,0 +1,3 @@
+
+File name: CI20171109.txt Line number: 1 Cause: java.lang.StringIndexOutOfBoundsException: begin 0, end 8, length 6
+File name: CI20171109.txt Line number: 1 Cause: java.lang.RuntimeException: Cant parse: AAAAAAAA

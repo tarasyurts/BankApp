@@ -1,14 +1,14 @@
 package config;
 
-import property.PropertiesProcessor;
-import property.accountprop.AccountNumber;
-import property.accountprop.CurrentBalance;
-import property.accountprop.CustomerIdNumber;
-import property.accountprop.LastTransactionDateTime;
-import property.clientprop.DateOfBirth;
-import property.clientprop.FirstName;
-import property.clientprop.IdNumber;
-import property.clientprop.LastName;
+import service.PropertiesProcessor;
+import model.property.accountprop.AccountNumber;
+import model.property.accountprop.CurrentBalance;
+import model.property.accountprop.CustomerIdNumber;
+import model.property.accountprop.LastTransactionDateTime;
+import model.property.clientprop.DateOfBirth;
+import model.property.clientprop.FirstName;
+import model.property.clientprop.IdNumber;
+import model.property.clientprop.LastName;
 
 public class Configurer {
 

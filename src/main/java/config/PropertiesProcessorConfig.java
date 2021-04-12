@@ -1,7 +1,7 @@
 package config;
 
-import property.PropertiesProcessor;
-import property.PropertyProcessor;
+import service.PropertiesProcessor;
+import model.property.PropertyProcessor;
 
 import java.util.*;
 

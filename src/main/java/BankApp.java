@@ -1,51 +1,39 @@
-import config.Configurer;
-import file.BankFile;
-import file.BankFileManager;
-import property.PropertiesProcessor;
+import model.bankfile.BankFile;
+import service.BankFileService;
+import service.BankFileTreeService;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 public class BankApp {
     public static void main(String[] args) {
 
-        List<BankFile> clientBankFiles;
         List<BankFile> toSaveClientBankFiles = new ArrayList<>();
 
-        try {
-            clientBankFiles = BankFileManager.readBankFiles();
+        List<BankFile> bankFiles = BankFileService.getInstance().readNewBankFiles();
+        List<BankFile> topNodes = BankFileTreeService.getInstance().formAssociations(bankFiles);
 
-            for (BankFile clientBankFile : clientBankFiles) {
+        BankFileTreeService.getInstance().tryProcess(topNodes);
 
-                BankFile tempBankFile = clientBankFile;
-                do {
-                    List<LinkedHashMap<String, Object>> processed = tempBankFile.getProcessed();
-
-                    processed.forEach(resultMap -> resultMap.entrySet().forEach(System.out::println));
-
-                    tempBankFile = tempBankFile.getAssociatedBankFile();
-                } while ( tempBankFile != null);
-                toSaveClientBankFiles.add(clientBankFile);
-            }
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        toSaveClientBankFiles.forEach(clientBankFile -> {
-            try {
-                BankFile tempBankFile = clientBankFile;
-                do {
-                    BankFileManager.removeProcessed(tempBankFile);
-                    tempBankFile = tempBankFile.getAssociatedBankFile();
-                } while ( tempBankFile != null);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+//        for (BankFile clientBankFile : bankFiles) {
+//            BankFile tempBankFile = clientBankFile;
+//            do {
+//                List<LinkedHashMap<String, Object>> processed = tempBankFile.getProcessed();
+//                processed.forEach(resultMap -> resultMap.entrySet().forEach(System.out::println));
+//                tempBankFile = tempBankFile.getAssociatedBankFile();
+//            } while ( tempBankFile != null);
+//            toSaveClientBankFiles.add(clientBankFile);
+//        }
+//
+//
+//
+//        toSaveClientBankFiles.forEach(clientBankFile -> {
+//            BankFile tempBankFile = clientBankFile;
+//            do {
+//                BankFileService.getInstance().moveProcessed(tempBankFile);
+//                tempBankFile = tempBankFile.getAssociatedBankFile();
+//            } while ( tempBankFile != null);
+//        });
     }
 }

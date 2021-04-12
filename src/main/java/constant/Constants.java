@@ -4,6 +4,7 @@ public class Constants {
 
     public static String NEW_DATA_FOLDER = "NewData";
     public static String PROCESSED_DATA_FOLDER = "ProcessedData";
+    public static String ERRORS_FILEPATH = "Errors.txt";
 
 
     public static String FILE_NAME_DATE_PATTERN = "\\d+";
