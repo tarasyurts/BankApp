@@ -3,6 +3,7 @@ package model.bankfile;
 
 import exception.BankFileException;
 import model.ProcessedRow;
+import service.BankFileExceptionsService;
 import service.PropertiesProcessor;
 import service.FileIOService;
 
@@ -81,7 +82,8 @@ public abstract class BankFile{
             try {
                 result.add(processor.setLine(lines[i]).process());
             } catch (RuntimeException e) {
-                throw new BankFileException("File name: " + name + " Line number: " + (i+1) + " Cause: " + e.toString());
+                BankFileExceptionsService.getInstance()
+                        .add(new BankFileException(this, "File name: " + name + " Line number: " + (i+1) + " Cause: " + e.toString() ));
             }
         }
         return result;

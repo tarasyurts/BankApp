@@ -5,7 +5,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import constant.Constants;
-import exception.CantMoveFileException;
 import model.bankfile.AccountBankFile;
 import model.bankfile.BankFile;
 import model.bankfile.CustomerBankFile;
@@ -45,18 +44,6 @@ public class BankFileService {
                 .collect(Collectors.toList()));
 
         return bankFiles;
-//        return findPathsByPattern(Constants.NEW_DATA_FOLDER, Constants.CUSTOMER_INFO_FILE_NAME_PATTERN).stream()
-//                .map(path -> {
-//                    BankFile bankFile = new CustomerBankFile(path.toAbsolutePath().toString());
-//                    try {
-//                        BankFile accountBankFile =
-//                                new AccountBankFile(getPathByDateAbbr(getDateFromFileName(bankFile.getName()), "AI").toString());
-//                        bankFile.setAssociatedBankFile(accountBankFile);
-//                    } catch (ParseException e) {
-//                        e.printStackTrace();
-//                    }
-//                    return bankFile;
-//                }).collect(Collectors.toList());
     }
 
     public void moveProcessed(BankFile bankFile){
@@ -64,7 +51,7 @@ public class BankFileService {
             Files.move(Paths.get(bankFile.getPath()),
                     Paths.get(Constants.PROCESSED_DATA_FOLDER + "/" + bankFile.getName()));
         } catch (IOException e) {
-            throw new CantMoveFileException("Cant move " + bankFile.getName() + " to new directory" );
+            System.err.println("Cant move " + bankFile.getName() + " to new directory");
         }
     }
 
@@ -104,13 +91,4 @@ public class BankFileService {
         String strDate = dateFormat.format(date);
         return Paths.get(Constants.NEW_DATA_FOLDER+ "/" + abbreviation + strDate + ".txt");
     }
-
-
-//    private static BankFile findBankFileByDate(String abbreviation, Date date){
-//
-//        DateFormat dateFormat = new SimpleDateFormat(Constants.FILE_NAME_DATE_FORMAT);
-//        String strDate = dateFormat.format(date);
-//        return new BankFile(Constants.NEW_DATA_FOLDER+ "/" + bankFileType.getAbbreviation() + strDate + ".txt",
-//                bankFileType);
-//    }
 }
