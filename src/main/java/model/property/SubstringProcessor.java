@@ -2,6 +2,6 @@ package model.property;
 
 import org.javatuples.Triplet;
 
-public interface PropertyProcessor {
+public interface SubstringProcessor {
     Triplet<String, Object, Integer> process(String line, int offset) throws RuntimeException;
 }

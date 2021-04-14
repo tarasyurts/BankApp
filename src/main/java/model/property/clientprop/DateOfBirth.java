@@ -1,17 +1,20 @@
 package model.property.clientprop;
 
+import model.property.PropertyInfo;
 import org.javatuples.Triplet;
-import model.property.PropertyProcessor;
+import model.property.SubstringProcessor;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class DateOfBirth implements PropertyProcessor {
+public class DateOfBirth extends PropertyInfo implements SubstringProcessor {
 
-    private final String propertyName = "DOB";
-    private final int length = 8;
     private final String dateFormatPattern = "yyyyMMdd";
+
+    public DateOfBirth() {
+        super("DOB", 8);
+    }
 
     @Override
     public Triplet<String, Object, Integer> process(String line, int offset) throws RuntimeException {

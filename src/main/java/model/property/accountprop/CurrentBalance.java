@@ -1,17 +1,20 @@
 package model.property.accountprop;
 
+import model.property.PropertyInfo;
 import org.javatuples.Triplet;
-import model.property.PropertyProcessor;
+import model.property.SubstringProcessor;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class CurrentBalance implements PropertyProcessor {
+public class CurrentBalance extends PropertyInfo implements SubstringProcessor {
 
-    private final String propertyName = "Current Balance";
-    private final int length = 10;
     private final String pattern = "[^0]\\d*";
+
+    public CurrentBalance() {
+        super("Current Balance", 10);
+    }
 
     public Triplet<String, Object, Integer> process(String line, int offset) throws RuntimeException {
 

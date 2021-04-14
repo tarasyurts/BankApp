@@ -1,12 +1,14 @@
 package model.property.clientprop;
 
+import model.property.PropertyInfo;
 import org.javatuples.Triplet;
-import model.property.PropertyProcessor;
+import model.property.SubstringProcessor;
 
-public class FirstName implements PropertyProcessor {
+public class FirstName extends PropertyInfo implements SubstringProcessor {
 
-    private final String propertyName = "First Name";
-    private final int length = 20;
+    public FirstName() {
+        super("First Name", 20);
+    }
 
     @Override
     public Triplet<String, Object, Integer> process(String line, int offset) throws RuntimeException {

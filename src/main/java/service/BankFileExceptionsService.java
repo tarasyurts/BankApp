@@ -17,7 +17,7 @@ public class BankFileExceptionsService {
 
     private final List<BankFileException> bankFileExceptions = new ArrayList<>();
 
-    public void add(BankFileException bankFileException){
+    public void addBankFileException(BankFileException bankFileException){
         bankFileExceptions.add(bankFileException);
     }
 

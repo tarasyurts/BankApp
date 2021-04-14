@@ -1,17 +1,20 @@
 package model.property.accountprop;
 
+import model.property.PropertyInfo;
 import org.javatuples.Triplet;
-import model.property.PropertyProcessor;
+import model.property.SubstringProcessor;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class LastTransactionDateTime implements PropertyProcessor {
+public class LastTransactionDateTime extends PropertyInfo implements SubstringProcessor {
 
-    private final String propertyName = "Last Transaction Date Time";
-    private final int length = 14;
     private final String dateFormatPattern = "yyyyMMddHHmmss";
+
+    public LastTransactionDateTime() {
+        super("Last Transaction Date Time", 14);
+    }
 
     @Override
     public Triplet<String, Object, Integer> process(String line, int offset) throws RuntimeException {

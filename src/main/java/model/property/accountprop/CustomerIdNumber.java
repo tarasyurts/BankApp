@@ -1,12 +1,14 @@
 package model.property.accountprop;
 
+import model.property.PropertyInfo;
 import org.javatuples.Triplet;
-import model.property.PropertyProcessor;
+import model.property.SubstringProcessor;
 
-public class CustomerIdNumber implements PropertyProcessor {
+public class CustomerIdNumber extends PropertyInfo implements SubstringProcessor {
 
-    private final String propertyName = "Customer ID Number";
-    private final int length = 4;
+    public CustomerIdNumber() {
+        super("Customer ID Number", 4);
+    }
 
     public Triplet<String, Object, Integer> process(String line, int offset) throws RuntimeException {
         String result = line.substring(offset).substring(0, length);

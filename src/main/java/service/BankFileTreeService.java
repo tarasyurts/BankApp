@@ -1,16 +1,16 @@
 package service;
 
-import constant.Constants;
 import exception.BankFileException;
-import model.ProcessedRow;
+import model.BankTableData;
 import model.bankfile.AccountBankFile;
 import model.bankfile.BankFile;
 import model.bankfile.CustomerBankFile;
 
-import java.io.IOException;
+import org.javatuples.Pair;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class BankFileTreeService {
@@ -41,26 +41,33 @@ public class BankFileTreeService {
                         }).collect(Collectors.toList());
     }
 
-    public List<BankFile> tryProcess(List<BankFile> topNodes){
+    public List<Pair<BankFile, List<BankTableData>>> tryProcess(List<BankFile> topNodes){
 
+        List<Pair<BankFile, List<BankTableData>>> allProcessedFiles = new ArrayList<>();
         for(BankFile topNode: topNodes){
-            try{
-                while (topNode != null){
-                    List<ProcessedRow> processed = topNode.getProcessed();
-                    topNode = topNode.getAssociatedBankFile();
-                }
-            }catch (BankFileException ex){
-                try {
-                    FileIOService.getInstance().writeLine(Constants.ERRORS_FILEPATH, ex.getMessage());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            while (topNode != null){
+                allProcessedFiles.add(new Pair<>(topNode, topNode.getDataProcessed()));
+                topNode = topNode.getAssociatedBankFile();
+//                processed.forEach(resultMap -> resultMap.entrySet().forEach(System.out::println));
             }
-
         }
-        return null;
+
+        List<BankFile> allowedTopNodes = topNodes.stream()
+                .filter(bankFile -> {
+                    while (bankFile != null) {
+                        BankFile finalBankFile = bankFile;
+                        if (BankFileExceptionsService.getInstance()
+                                .getBankFileExceptions().stream()
+                                .map(BankFileException::getBankFile)
+                                .anyMatch(bankFile1 -> bankFile1 == finalBankFile)) return false;
+                        bankFile = bankFile.getAssociatedBankFile();
+                    }
+                    return true;
+                }).collect(Collectors.toList());
+
+        return allProcessedFiles.stream()
+                .filter(pair -> allowedTopNodes.contains(pair.getValue0())).collect(Collectors.toList());
     }
 
-//            processed.forEach(resultMap -> resultMap.entrySet().forEach(System.out::println));
 
 }

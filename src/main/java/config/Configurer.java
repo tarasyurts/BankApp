@@ -1,6 +1,6 @@
 package config;
 
-import service.PropertiesProcessor;
+import service.StringProcessor;
 import model.property.accountprop.AccountNumber;
 import model.property.accountprop.CurrentBalance;
 import model.property.accountprop.CustomerIdNumber;
@@ -12,24 +12,30 @@ import model.property.clientprop.LastName;
 
 public class Configurer {
 
-    public static PropertiesProcessor getConfiguredClientPropertiesProcessor(){
-        return new PropertiesProcessorConfig()
-                .addProperty(new IdNumber())
-                .addProperty(new FirstName())
-                .addProperty(new LastName())
-                .addProperty(new DateOfBirth())
+    private static Configurer INSTANCE;
+    private Configurer(){}
+    public static Configurer getInstance(){
+        if( INSTANCE == null )
+            INSTANCE = new Configurer();
+        return INSTANCE;
+    }
+
+    public StringProcessor getConfiguredClientStringProcessor(){
+        return new StringProcessorConfig()
+                .addSubstringProcessor(new IdNumber())
+                .addSubstringProcessor(new FirstName())
+                .addSubstringProcessor(new LastName())
+                .addSubstringProcessor(new DateOfBirth())
                 .config();
     }
 
-    public static PropertiesProcessor getConfiguredAccountPropertiesProcessor(){
-        return new PropertiesProcessorConfig()
-                .addProperty(new AccountNumber())
-                .addProperty(new CurrentBalance())
-                .addProperty(new LastTransactionDateTime())
-                .addProperty(new CustomerIdNumber())
+    public StringProcessor getConfiguredAccountStringProcessor(){
+        return new StringProcessorConfig()
+                .addSubstringProcessor(new AccountNumber())
+                .addSubstringProcessor(new CurrentBalance())
+                .addSubstringProcessor(new LastTransactionDateTime())
+                .addSubstringProcessor(new CustomerIdNumber())
                 .config();
 
     }
-
-
 }
