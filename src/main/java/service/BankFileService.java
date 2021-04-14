@@ -5,9 +5,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import constant.Constants;
-import model.bankfile.AccountBankFile;
+import model.bankfile.AccountFileData;
 import model.bankfile.BankFile;
-import model.bankfile.CustomerBankFile;
+import model.bankfile.CustomerFileData;
 
 import java.nio.file.Paths;
 import java.text.DateFormat;
@@ -36,11 +36,19 @@ public class BankFileService {
         List<BankFile> bankFiles = new ArrayList<>();
 
         bankFiles.addAll(findPathsByPattern(Constants.NEW_DATA_FOLDER, Constants.CUSTOMER_INFO_FILE_NAME_PATTERN).stream()
-                .map(path -> new CustomerBankFile(path.toAbsolutePath().toString()))
+                .map(path -> {
+                     BankFile b = new BankFile(path.toAbsolutePath().toString());
+                     b.setFileData(new CustomerFileData(b));
+                     return b;
+                })
                 .collect(Collectors.toList()));
 
         bankFiles.addAll(findPathsByPattern(Constants.NEW_DATA_FOLDER, Constants.ACCOUNT_INFO_FILE_NAME_PATTERN).stream()
-                .map(path -> new AccountBankFile(path.toAbsolutePath().toString()))
+                .map(path -> {
+                    BankFile b = new BankFile(path.toAbsolutePath().toString());
+                    b.setFileData(new AccountFileData(b));
+                    return b;
+                })
                 .collect(Collectors.toList()));
 
         return bankFiles;

@@ -1,3 +1,4 @@
+import constant.Constants;
 import exception.BankFileException;
 import model.BankTableData;
 import model.bankfile.BankFile;
@@ -5,7 +6,9 @@ import org.javatuples.Pair;
 import service.BankFileExceptionsService;
 import service.BankFileService;
 import service.BankFileTreeService;
+import service.FileIOService;
 
+import java.io.IOException;
 import java.util.List;
 
 public class BankApp {
@@ -13,10 +16,18 @@ public class BankApp {
 
         List<BankFile> bankFiles = BankFileService.getInstance().readNewBankFiles();
         List<BankFile> topNodes = BankFileTreeService.getInstance().formAssociations(bankFiles);
+        List<BankFile> suitableTopNodes = BankFileTreeService.getInstance().getSuitable(topNodes);
 
-        List<Pair<BankFile, List<BankTableData>>> pairs = BankFileTreeService.getInstance().tryProcess(topNodes);
-        BankFileExceptionsService.getInstance().getBankFileExceptions().stream()
-                .map(BankFileException::getMessage).forEach(System.out::println);
+        BankFileTreeService.getInstance().save(suitableTopNodes);
+
+        BankFileExceptionsService.getInstance().getBankFileExceptions().
+                forEach(ex -> {
+                    try {
+                        FileIOService.getInstance().writeLine(Constants.ERRORS_FILEPATH, ex.getMessage());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
 
     }
 }

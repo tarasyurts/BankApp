@@ -2,9 +2,9 @@ package service;
 
 import exception.BankFileException;
 import model.BankTableData;
-import model.bankfile.AccountBankFile;
+import model.bankfile.AccountFileData;
 import model.bankfile.BankFile;
-import model.bankfile.CustomerBankFile;
+import model.bankfile.CustomerFileData;
 
 import org.javatuples.Pair;
 
@@ -28,31 +28,31 @@ public class BankFileTreeService {
 
         List<BankFile> accountBankFiles =
                 allBankFiles.stream()
-                        .filter(bankFile -> bankFile instanceof AccountBankFile).collect(Collectors.toList());
+                        .filter(bankFile -> bankFile.getFileData() instanceof AccountFileData).collect(Collectors.toList());
 
-        return allBankFiles.stream().filter( bankFile -> bankFile instanceof CustomerBankFile)
+        return allBankFiles.stream().filter( bankFile -> bankFile.getFileData() instanceof CustomerFileData)
                 .map( bankFile -> {
                             Date date = BankFileService.getInstance().getDateFromFileName(bankFile.getName());
                             bankFile.setAssociatedBankFile(accountBankFiles.stream()
                                     .filter(accountBankFile ->
-                                            BankFileService.getInstance().getDateFromFileName(bankFile.getName()).equals(date)
+                                            BankFileService.getInstance().getDateFromFileName(accountBankFile.getName()).equals(date)
                                     ).findFirst().orElse(null));
                             return bankFile;
                         }).collect(Collectors.toList());
     }
 
-    public List<Pair<BankFile, List<BankTableData>>> tryProcess(List<BankFile> topNodes){
+    public List<BankFile> getSuitable(List<BankFile> topNodes){
 
-        List<Pair<BankFile, List<BankTableData>>> allProcessedFiles = new ArrayList<>();
-        for(BankFile topNode: topNodes){
-            while (topNode != null){
-                allProcessedFiles.add(new Pair<>(topNode, topNode.getDataProcessed()));
-                topNode = topNode.getAssociatedBankFile();
-//                processed.forEach(resultMap -> resultMap.entrySet().forEach(System.out::println));
-            }
-        }
+//        List<Pair<BankFile, List<BankTableData>>> allProcessedFiles = new ArrayList<>();
+//        for(BankFile topNode: topNodes){
+//            while (topNode != null){
+//                allProcessedFiles.add(new Pair<>(topNode, topNode.getFileData().getProcessed()));
+//                topNode = topNode.getAssociatedBankFile();
+////                processed.forEach(resultMap -> resultMap.entrySet().forEach(System.out::println));
+//            }
+//        }
 
-        List<BankFile> allowedTopNodes = topNodes.stream()
+        return topNodes.stream()
                 .filter(bankFile -> {
                     while (bankFile != null) {
                         BankFile finalBankFile = bankFile;
@@ -65,9 +65,17 @@ public class BankFileTreeService {
                     return true;
                 }).collect(Collectors.toList());
 
-        return allProcessedFiles.stream()
-                .filter(pair -> allowedTopNodes.contains(pair.getValue0())).collect(Collectors.toList());
+//        return allProcessedFiles.stream()
+//                .filter(pair -> allowedTopNodes.contains(pair.getValue0())).collect(Collectors.toList());
     }
 
+    public void save(List<BankFile> topNodes){
+        for(BankFile topNode: topNodes){
+            while (topNode != null){
+                topNode.getFileData().save();
+                topNode = topNode.getAssociatedBankFile();
+            }
+        }
+    }
 
 }

@@ -14,27 +14,19 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-public abstract class BankFile{
+public class BankFile{
 
-    private final String name;
-    private final String path;
-    private final CompletableFuture<String[]> data;
-    private final StringProcessor processor;
+    private String name;
+    private String path;
+    private FileData fileData;
+//    private final CompletableFuture<String[]> data;
+//    private final StringProcessor processor;
 
     private BankFile associatedBankFile;
 
-    public BankFile(String path, StringProcessor processor){
+    public BankFile(String path){
         this.name = new File(path).getName();
         this.path = path;
-        this.data = CompletableFuture.supplyAsync(()-> {
-            try {
-                return FileIOService.getInstance().read(path);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return new String[0];
-        });
-        this.processor = processor;
     }
 
     public String getName() {
@@ -45,6 +37,13 @@ public abstract class BankFile{
         return path;
     }
 
+    public FileData getFileData() {
+        return fileData;
+    }
+
+    public void setFileData(FileData fileData) {
+        this.fileData = fileData;
+    }
 
     public BankFile getAssociatedBankFile() {
         return associatedBankFile;
@@ -52,28 +51,6 @@ public abstract class BankFile{
 
     public void setAssociatedBankFile(BankFile associatedBankFile) {
         this.associatedBankFile = associatedBankFile;
-    }
-
-    public List<BankTableData> getDataProcessed() throws BankFileException {
-
-        List<BankTableData> result = new ArrayList<>();
-
-        String[] lines = new String[0];
-        try {
-            lines = data.get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
-
-        for(int i = 0; i < lines.length; i++) {
-            try {
-                result.add(processor.setString(lines[i]).process());
-            } catch (RuntimeException e) {
-                BankFileExceptionsService.getInstance()
-                        .addBankFileException(new BankFileException(this, "File name: " + name + " Line number: " + (i+1) + " Cause: " + e.toString() ));
-            }
-        }
-        return result;
     }
 
     @Override
