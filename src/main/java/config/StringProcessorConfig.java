@@ -15,6 +15,7 @@ public class StringProcessorConfig {
     }
 
     public StringProcessor config(){
+
         // TODO: Add exception if list is empty
         return new StringProcessor(substringProcessors);
     }

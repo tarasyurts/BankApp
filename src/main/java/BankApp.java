@@ -1,8 +1,11 @@
 import constant.Constants;
 import exception.BankFileException;
 import model.BankTableData;
+import model.bankfile.AccountFileData;
 import model.bankfile.BankFile;
 import org.javatuples.Pair;
+import repository.AccountRepository;
+import repository.CustomerRepository;
 import service.BankFileExceptionsService;
 import service.BankFileService;
 import service.BankFileTreeService;
@@ -20,14 +23,17 @@ public class BankApp {
 
         BankFileTreeService.getInstance().save(suitableTopNodes);
 
-        BankFileExceptionsService.getInstance().getBankFileExceptions().
-                forEach(ex -> {
-                    try {
-                        FileIOService.getInstance().writeLine(Constants.ERRORS_FILEPATH, ex.getMessage());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                });
+//        CustomerRepository.getInstance().save(new BankTableData());
+//        AccountRepository.getInstance().save(new BankTableData());
+//
+//        BankFileExceptionsService.getInstance().getBankFileExceptions().
+//                forEach(ex -> {
+//                    try {
+//                        FileIOService.getInstance().writeLine(Constants.ERRORS_FILEPATH, ex.getMessage());
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                });
 
     }
 }
