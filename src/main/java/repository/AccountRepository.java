@@ -53,8 +53,5 @@ public class AccountRepository implements Repository {
                 se.printStackTrace();
             }
         }
-
-
-        System.out.println("SAVING:\t" + row);
     }
 }

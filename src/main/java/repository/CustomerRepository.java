@@ -59,7 +59,5 @@ public class CustomerRepository implements Repository {
                 se.printStackTrace();
             }
         }
-
-        System.out.println("SAVING:\t" + row);
     }
 }

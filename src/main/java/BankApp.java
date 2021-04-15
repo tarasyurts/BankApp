@@ -22,18 +22,17 @@ public class BankApp {
         List<BankFile> suitableTopNodes = BankFileTreeService.getInstance().getSuitable(topNodes);
 
         BankFileTreeService.getInstance().save(suitableTopNodes);
+        BankFileTreeService.getInstance().moveProcessed(suitableTopNodes);
 
-//        CustomerRepository.getInstance().save(new BankTableData());
-//        AccountRepository.getInstance().save(new BankTableData());
-//
-//        BankFileExceptionsService.getInstance().getBankFileExceptions().
-//                forEach(ex -> {
-//                    try {
-//                        FileIOService.getInstance().writeLine(Constants.ERRORS_FILEPATH, ex.getMessage());
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                });
+
+        BankFileExceptionsService.getInstance().getBankFileExceptions().
+                forEach(ex -> {
+                    try {
+                        FileIOService.getInstance().writeLine(Constants.ERRORS_FILEPATH, ex.getMessage());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
 
     }
 }

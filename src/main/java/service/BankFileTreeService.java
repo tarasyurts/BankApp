@@ -61,4 +61,13 @@ public class BankFileTreeService {
         }
     }
 
+    public void moveProcessed(List<BankFile> topNodes){
+        for(BankFile topNode: topNodes){
+            while (topNode != null){
+                BankFileService.getInstance().moveProcessed(topNode);
+                topNode = topNode.getAssociatedBankFile();
+            }
+        }
+    }
+
 }
