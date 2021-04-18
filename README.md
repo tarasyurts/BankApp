@@ -1,2 +1,2 @@
 # BankApp
-<img src="/gitimages/uml_diagram.png" width="700" alt="Edit Modal">  
+<img src="/gitimages/uml_diagram.png" width="900" alt="Edit Modal">  
